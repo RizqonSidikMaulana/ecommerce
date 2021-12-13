@@ -20,6 +20,14 @@ class TransactionController extends Controller
         //
     }
 
+    /**
+     * Create transaction for specific item.
+     *
+     * @param  Illuminate\Http\Request  $request
+     * @param  int  $idGoods
+     * @param  int  $idUser
+     * @return void
+     */
     public function purchaseItem(Request $request, $idGoods, $idUser) {
         $goods = Goods::find($idGoods);
 
@@ -28,6 +36,7 @@ class TransactionController extends Controller
             Redis::HSET('goods_' . $goods->id, 'sold', 0);
         }
 
+        // Implement lua script.
         $qty = $request->input('quantity');
         $value = Redis::eval($this->luaScript(), 1, 'goods_' . $goods->id, $qty);
 
@@ -38,7 +47,7 @@ class TransactionController extends Controller
             return response()->json(['response_code' => 99, 'message' => 'Stock Unavailability']);
         }
 
-        return response()->json(['response_code' => 00, 'message' => 'success purchase']);
+        return response()->json(['response_code' => 00, 'message' => 'Success Purchase']);
     }
 
     protected function luaScript()
