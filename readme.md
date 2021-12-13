@@ -8,3 +8,30 @@ Pada saat event 12.12 dimulai, akan banyak sekali user yang mengakses / membeli 
 ## Antisipasi Masalah
 
 Hal ini dapat diatasi salah satunya dengan mengimplementasikan redis, dimana redis adalah single thread application sehingga setiap request dapat dijalankan serial, hal ini dapat mencegah terjadinya kesalahan jumlah stok dalam database.
+
+# POC
+
+POC diimplementasi menggunakan Lumen Laravel, dan Redis, dengan menggunakan 1 endpoint yang sangat berperan penting saat terjadinya perubahan stock.
+
+Harap meng-copy file `.env.example` dan rename menjadi `.env`, dan sesuaikan credential database dengan credential yang terinstal di local.
+
+Disarankan untuk melakukan migrasi database dengan perintah berikut :
+```sh
+php artisan migrate
+```
+
+Dan mengeksekusi file seeder untuk mengisi data dummy di database :
+```sh
+php artisan db:seed --class=GoodsSeeder
+php artisan db:seed --class=UserSeeder
+```
+
+Menjalankan aplikasi dengan perintah :
+```sh
+php artisan serve
+```
+
+Endpoint dapat diakses di :
+```sh
+http://localhost:8000/purchase/id_goods/id_user
+```
