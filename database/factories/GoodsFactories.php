@@ -14,6 +14,7 @@
 $factory->define(App\Goods::class, function (Faker\Generator $faker) {
     return [
         'name' => 'Sepatu',
+        'description' => 'Sepatu original',
         'stock' => 10,
         'price' => 100000,
     ];
