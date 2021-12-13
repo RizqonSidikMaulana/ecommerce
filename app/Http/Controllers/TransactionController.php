@@ -22,6 +22,7 @@ class TransactionController extends Controller
 
     /**
      * Create transaction for specific item.
+     * This function can handling simultaneous request.
      *
      * @param  Illuminate\Http\Request  $request
      * @param  int  $idGoods
@@ -31,14 +32,15 @@ class TransactionController extends Controller
     public function purchaseItem(Request $request, $idGoods, $idUser) {
         $goods = Goods::find($idGoods);
 
+        // Initialize number of stock.
         if (!Redis::HEXISTS('goods_' . $goods->id, 'stock')) {
             Redis::HSET('goods_' . $goods->id, 'stock', $goods->stock);
             Redis::HSET('goods_' . $goods->id, 'sold', 0);
         }
 
-        // Implement lua script.
+        // Implement lua script, for better handling concurrent
         $qty = $request->input('quantity');
-        $value = Redis::eval($this->luaScript(), 1, 'goods_' . $goods->id, $qty);
+        $value = Redis::eval($this->checkStockScript(), 1, 'goods_' . $goods->id, $qty);
 
         if ($value != 0) {
             $goods->stock -= $qty;
@@ -50,7 +52,7 @@ class TransactionController extends Controller
         return response()->json(['response_code' => 00, 'message' => 'Success Purchase']);
     }
 
-    protected function luaScript()
+    protected function checkStockScript()
     {
         return <<<'LUA'
 local qty = tonumber(ARGV[1])
