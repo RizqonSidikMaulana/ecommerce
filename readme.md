@@ -1,21 +1,10 @@
-# Lumen PHP Framework
+# Ecommerce
 
-[![Build Status](https://travis-ci.org/laravel/lumen-framework.svg)](https://travis-ci.org/laravel/lumen-framework)
-[![Total Downloads](https://poser.pugx.org/laravel/lumen-framework/d/total.svg)](https://packagist.org/packages/laravel/lumen-framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/lumen-framework/v/stable.svg)](https://packagist.org/packages/laravel/lumen-framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/lumen-framework/v/unstable.svg)](https://packagist.org/packages/laravel/lumen-framework)
-[![License](https://poser.pugx.org/laravel/lumen-framework/license.svg)](https://packagist.org/packages/laravel/lumen-framework)
 
-Laravel Lumen is a stunningly fast PHP micro-framework for building web applications with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Lumen attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as routing, database abstraction, queueing, and caching.
+## Analisis Masalah
 
-## Official Documentation
+Pada saat event 12.12 dimulai, akan banyak sekali user yang mengakses / membeli item di aplikasi, diketahui dalam faktanya, item yang sering bermasalah merupakan item yang laris di jual, dan issue ini terjadi ketika event 12.12 digelar bukan sebelum event ini dilakukan. dari fakta tersebut menunjukan bahwa bukan karna kesalahan admin yang meng-input kan data stock barang namun kemungkinan yang dapat terjadi adalah adanya kesamaan waktu saat beberapa user bertransaksi di aplikasi dan semua request tersebut di proses oleh server tanpa memperhatikan berapa stok yang tersedia sehingga terjadi oversold, sehingga kemungkinan salah pencatatan stock dapat terjadi bahkan mencapai nilai negatif.
 
-Documentation for the framework can be found on the [Lumen website](https://lumen.laravel.com/docs).
+## Antisipasi Masalah
 
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Lumen, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Lumen framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Hal ini dapat diatasi salah satunya dengan mengimplementasikan redis, dimana redis adalah single thread application sehingga setiap request dapat dijalankan serial, hal ini dapat mencegah terjadinya kesalahan jumlah stok dalam database.
