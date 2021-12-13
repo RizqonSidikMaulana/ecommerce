@@ -35,3 +35,10 @@ Endpoint dapat diakses di :
 ```sh
 http://localhost:8000/purchase/id_goods/id_user
 ```
+
+dengan request body :
+```sh
+{
+    "quantity" : 5
+}
+```
